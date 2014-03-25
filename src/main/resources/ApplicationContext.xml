@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd 
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<bean id="trainer" class="com.dy.textclassifier.trainer.Trainer">
+		<property name="dataInput">
+			<ref bean="datasource"></ref>
+		</property>
+		<property name="processors">
+			<list>
+				<ref bean="tokenizerProcessor"></ref>
+				<ref bean="stopWordProcessor"></ref>
+				<ref bean="featureSelectProcessor"></ref>
+				<ref bean="vectorProcessor"></ref>
+			</list>
+		</property>
+	</bean>
+	<bean id="datasource" class="com.dy.textclassifier.common.datasource.DataFromFiles">
+		<property name="negativePath" value="E:\\worktemp\\train\\C000007"></property>
+		<property name="positivePath" value="E:\\worktemp\\train\\C000013"></property>
+		<property name="encoding" value="GBK"></property>
+	</bean>
+	<bean id="tokenizerProcessor" class="com.dy.textclassifier.processors.TokenizerProcessor">
+		<property name="tokenizer">
+			<ref bean="tokenizer" />
+		</property>
+	</bean>
+	<bean id="stopWordProcessor" class="com.dy.textclassifier.processors.StopWordProcessor"></bean>
+	<bean id="featureSelectProcessor" class="com.dy.textclassifier.processors.FeatureSelectProcessor">
+		<property name="statistic">
+			<ref bean="statistic"></ref>
+		</property>
+		<property name="termSelector">
+			<ref bean="featureSelector"></ref>
+		</property>
+	</bean>
+	<bean id="vectorProcessor" class="com.dy.textclassifier.processors.VectorProcessor">
+		<property name="statistic">
+			<ref bean="statistic"></ref>
+		</property>
+	</bean>
+
+	<bean id="tokenizer" class="com.dy.textclassifier.common.tokenizer.ICTCLASTokenizer"></bean>
+	<bean id="statistic" class="com.dy.textclassifier.common.bean.StatisticBean"></bean>
+	<bean id="featureSelector"
+		class="com.dy.textclassifier.common.featureselector.CHISelector"></bean>
+</beans>

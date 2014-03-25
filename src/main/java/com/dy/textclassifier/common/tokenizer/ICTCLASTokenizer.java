@@ -11,15 +11,17 @@ import com.sun.jna.Native;
 public class ICTCLASTokenizer implements ITokenizer {
 
 	private Logger log = LogManager.getLogger(ICTCLASTokenizer.class);
+	
+	private static String dllPath = "NLPIR";
 
-	private String dataPath = "";
+	private static String dataPath = "";
 
 	private int bPOSTagged = 1;
 
 	// 定义接口CLibrary，继承自com.sun.jna.Library
 	public interface CLibrary extends Library {
 		// 定义并初始化接口的静态变量
-		CLibrary Instance = (CLibrary) Native.loadLibrary("NLPIR",
+		CLibrary Instance = (CLibrary) Native.loadLibrary(dllPath,
 				CLibrary.class);
 
 		public int NLPIR_Init(String sDataPath, int encoding,
@@ -33,13 +35,15 @@ public class ICTCLASTokenizer implements ITokenizer {
 		public int NLPIR_AddUserWord(String sWord);// add by qp 2008.11.10
 
 		public int NLPIR_DelUsrWord(String sWord);// add by qp 2008.11.10
+		
+		public int NLPIR_ImportUserDict(String sFileName);
 
 		public void NLPIR_Exit();
 	}
-
-	public ICTCLASTokenizer(int encoding) {
+	
+	public ICTCLASTokenizer() {
 		super();
-		CLibrary.Instance.NLPIR_Init(dataPath, encoding, "0");
+		CLibrary.Instance.NLPIR_Init(dataPath, 1, "0");
 	}
 
 	public int addUserWord(String sWord) {
@@ -82,7 +86,7 @@ public class ICTCLASTokenizer implements ITokenizer {
 
 	// for test
 	public static void main(String[] args) {
-		ICTCLASTokenizer test = new ICTCLASTokenizer(1);
+		ICTCLASTokenizer test = new ICTCLASTokenizer();
 		String sInput = "今天下雪了，江南styleaa abc";
 		byte[] bInput = null;
 		try {
