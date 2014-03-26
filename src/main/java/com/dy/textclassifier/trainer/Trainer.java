@@ -54,8 +54,6 @@ public class Trainer {
 		trainer.train();
 	}
 	
-	
-	
 
 	public DataSource getDataInput() {
 		return dataInput;
@@ -79,5 +77,13 @@ public class Trainer {
 
 	public void setProcessors(List<IProcessor> processors) {
 		this.processors = processors;
+	}
+
+	public AbstractClassifier getClassifier() {
+		return classifier;
+	}
+
+	public void setClassifier(AbstractClassifier classifier) {
+		this.classifier = classifier;
 	}
 }

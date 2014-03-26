@@ -16,14 +16,14 @@ public class TokenizerProcessor implements IProcessor {
 
 	public void process(List<Document> documents) {
 		for (Document document : documents) {
-			String[] words = tokenizer.tokenize(document.getContent());
+			String[] terms = tokenizer.tokenize(document.getContent());
 			document.setContent(null);
-			document.setWords(words);
+			document.setTerms(terms);
 			// for debug
 //			log.debug(document.getContent());
 			StringBuilder message = new StringBuilder();
-			for(String word : words){
-				message.append(word + " ");
+			for(String term : terms){
+				message.append(term + " ");
 			}
 			log.debug(message.toString());
 		}

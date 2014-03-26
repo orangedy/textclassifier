@@ -1,12 +1,11 @@
 package com.dy.textclassifier.processors;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import com.dy.textclassifier.common.bean.Document;
 import com.dy.textclassifier.common.bean.StatisticBean;
+import com.dy.textclassifier.common.bean.TermTuple;
 
 public class VectorProcessor implements IProcessor {
 
@@ -20,53 +19,27 @@ public class VectorProcessor implements IProcessor {
 		this.statistic = statistic;
 	}
 
+	public void init() {
+		// TODO Auto-generated method stub
+
+	}
+
 	public void process(List<Document> documents) {
 		int featureNum = statistic.getFeatureWords().size();
-		HashMap<String, Integer> featureIndex = new HashMap<String, Integer>(
-				Math.max((int) (featureNum / .75f) + 1, 16));
-		double[] IDFs = new double[featureNum];
-		List<String> featureWords = statistic.getFeatureWords();
-		shuffle(featureWords);
-		shuffle(featureWords);
-		shuffle(featureWords);
-
-		for (int i = statistic.getFeatureWords().size() - 1; i > 0; i--) {
-			featureIndex.put(featureWords.get(i), i);
-			IDFs[i] = calIDF(featureWords.get(i));
-		}
+		Map<String, TermTuple> featureInfo = statistic.getFeatureInfo();
 		for (Document document : documents) {
-			double documentLen = document.getFeatures().size();
+			double documentLen = document.getTermNum();
 			double[] vector = new double[featureNum];
-			for (Map.Entry<String, Integer> entry : document.getFeatures().entrySet()) {
-				if (featureIndex.containsKey(entry.getKey())) {
-					int index = featureIndex.get(entry.getKey());
-					double DFIDF = entry.getValue() / documentLen * IDFs[index];
+			for (Map.Entry<String, Integer> entry : document.getTermFrequency().entrySet()) {
+				if (featureInfo.containsKey(entry.getKey())) {
+					int index = featureInfo.get(entry.getKey()).getIndex();
+					double DFIDF = entry.getValue() / documentLen * featureInfo.get(entry.getKey()).getIDFWeight();
 					vector[index] = DFIDF;
 				}
 			}
 			document.setVector(vector);
+			document.setTermFrequency(null);
 		}
-	}
-
-	public double calIDF(String word) {
-		double sum = statistic.getDocNum();
-		double ID = statistic.getTermInfo().get(word).getPosi() + statistic.getTermInfo().get(word).getNega();
-		return ID / sum;
-	}
-
-	public void shuffle(List<String> list) {
-		Random random = new Random();
-		for (int i = list.size() - 1; i >= 0; i--) {
-			int tempPos = random.nextInt(i + 1);
-			String temp = list.get(tempPos);
-			list.set(tempPos, list.get(i));
-			list.set(i, temp);
-		}
-	}
-
-	public void init() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

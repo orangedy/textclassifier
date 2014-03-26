@@ -10,18 +10,24 @@
 		<property name="dataInput">
 			<ref bean="datasource"></ref>
 		</property>
+		<property name="classifier">
+			<ref bean="svmClassifier"></ref>
+		</property>
 		<property name="processors">
 			<list>
 				<ref bean="tokenizerProcessor"></ref>
 				<ref bean="stopWordProcessor"></ref>
+				<ref bean="statisticProcessor"></ref>
 				<ref bean="featureSelectProcessor"></ref>
 				<ref bean="vectorProcessor"></ref>
 			</list>
 		</property>
 	</bean>
+	<bean id="svmClassifier" class="com.dy.textclassifier.classifier.SVMClassifier"></bean>
 	<bean id="datasource" class="com.dy.textclassifier.common.datasource.DataFromFiles">
-		<property name="negativePath" value="E:\\worktemp\\train\\C000007"></property>
-		<property name="positivePath" value="E:\\worktemp\\train\\C000013"></property>
+		<property name="trainPath" value="E:\\worktemp\\train_sogou"></property>
+		<property name="evalPath" value="E:\\worktemp\\eval_sogou"></property>
+		<property name="testPath" value="E:\\worktemp\\eval_sogou"></property>
 		<property name="encoding" value="GBK"></property>
 	</bean>
 	<bean id="tokenizerProcessor" class="com.dy.textclassifier.processors.TokenizerProcessor">
@@ -29,7 +35,8 @@
 			<ref bean="tokenizer" />
 		</property>
 	</bean>
-	<bean id="stopWordProcessor" class="com.dy.textclassifier.processors.StopWordProcessor"></bean>
+	<bean id="stopWordProcessor" class="com.dy.textclassifier.processors.StopWordProcessor">
+	</bean>
 	<bean id="featureSelectProcessor" class="com.dy.textclassifier.processors.FeatureSelectProcessor">
 		<property name="statistic">
 			<ref bean="statistic"></ref>
@@ -43,9 +50,38 @@
 			<ref bean="statistic"></ref>
 		</property>
 	</bean>
+	<bean id="statisticProcessor" class="com.dy.textclassifier.processors.StatisticProcessor">
+		<property name="statistic">
+			<ref bean="statistic"></ref>
+		</property>
+	</bean>
 
 	<bean id="tokenizer" class="com.dy.textclassifier.common.tokenizer.ICTCLASTokenizer"></bean>
 	<bean id="statistic" class="com.dy.textclassifier.common.bean.StatisticBean"></bean>
 	<bean id="featureSelector"
 		class="com.dy.textclassifier.common.featureselector.CHISelector"></bean>
+	
+	
+	<bean id="validator" class="com.dy.textclassifier.validator.Validator">
+		<property name="dataInput">
+			<ref bean="datasource"></ref>
+		</property>
+		<property name="classifier">
+			<ref bean="svmClassifier"></ref>
+		</property>
+		<property name="processors">
+			<list>
+				<ref bean="tokenizerProcessor"></ref>
+				<ref bean="stopWordProcessor"></ref>
+				<ref bean="featureRestoreProcessor"></ref>
+				<ref bean="vectorProcessor"></ref>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="featureRestoreProcessor" class="com.dy.textclassifier.processors.FeatureRestoreProcessor">
+		<property name="statistic">
+			<ref bean="statistic"></ref>
+		</property>
+	</bean>
 </beans>

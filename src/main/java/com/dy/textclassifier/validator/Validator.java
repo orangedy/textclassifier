@@ -40,23 +40,51 @@ public class Validator {
 
 	public void eval() {
 		init();
-		documents = dataInput.getDocumentsForEval();
+		documents = dataInput.getDocumentsForTest();
 		if (documents.size() > 0) {
 			for (IProcessor processor : processors) {
 				processor.process(documents);
 			}
 		}
 		classifier.eval(documents);
+		checkResult();
+	}
+	
+	public void checkResult(){
+		int positiveNum = 0;
+		int negativeNum = 0;
+		int positiveRight = 0;
+		int positiveWrong = 0;
+		int negativeRight = 0;
+		int negativeWrong = 0;
+		for(Document document : documents) {
+			if(document.getCategory() == 1){
+				positiveNum++;
+				if(document.getEvalCategory() == 1){
+					positiveRight++;
+				}else{
+					positiveWrong++;
+				}
+			}else{
+				negativeNum++;
+				if(document.getEvalCategory() == 1){
+					negativeWrong++;
+				}else{
+					negativeRight++;
+				}
+			}
+		}
+		System.out.println("positiveNum:" + positiveNum);
+		System.out.println("negativeNum:" + negativeNum);
+		System.out.println(positiveRight + "	" + positiveWrong);
+		System.out.println(negativeWrong + "	" + negativeRight);
 	}
 	
 	public static void main(String[] args) {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("ApplicationContext.xml");
-		Validator validator = (Validator) ctx.getBean("trainer");
+		Validator validator = (Validator) ctx.getBean("validator");
 		validator.eval();
 	}
-	
-	
-	
 
 	public DataSource getDataInput() {
 		return dataInput;
@@ -80,5 +108,21 @@ public class Validator {
 
 	public void setProcessors(List<IProcessor> processors) {
 		this.processors = processors;
+	}
+
+	public List<Document> getDocuments() {
+		return documents;
+	}
+
+	public void setDocuments(List<Document> documents) {
+		this.documents = documents;
+	}
+
+	public AbstractClassifier getClassifier() {
+		return classifier;
+	}
+
+	public void setClassifier(AbstractClassifier classifier) {
+		this.classifier = classifier;
 	}
 }

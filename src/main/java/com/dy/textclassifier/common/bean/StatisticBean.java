@@ -16,7 +16,7 @@ public class StatisticBean {
 	private int negaNum = 0;
 	
 	/** 词的类别分别统计，形式为“词  正类出现文档数 负类出现文档数”	 */
-	private Map<String, Tuple> termInfo = new HashMap<String, Tuple>();
+	private Map<String, TermCateTuple> termCateInfo = new HashMap<String, TermCateTuple>();
 	
 	private List<String> featureWords;
 	
@@ -47,12 +47,12 @@ public class StatisticBean {
 		this.negaNum = negaNum;
 	}
 
-	public Map<String, Tuple> getTermInfo() {
-		return termInfo;
+	public Map<String, TermCateTuple> getTermCateInfo() {
+		return termCateInfo;
 	}
 
-	public void setTermInfo(Map<String, Tuple> termInfo) {
-		this.termInfo = termInfo;
+	public void setTermCateInfo(Map<String, TermCateTuple> termInfo) {
+		this.termCateInfo = termInfo;
 	}
 
 	public List<String> getFeatureWords() {
@@ -61,6 +61,14 @@ public class StatisticBean {
 
 	public void setFeatureWords(List<String> featureWords) {
 		this.featureWords = featureWords;
+	}
+
+	public Map<String, TermTuple> getFeatureInfo() {
+		return featureInfo;
+	}
+
+	public void setFeatureInfo(Map<String, TermTuple> featureInfo) {
+		this.featureInfo = featureInfo;
 	}
 
 }

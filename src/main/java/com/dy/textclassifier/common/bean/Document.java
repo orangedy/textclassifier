@@ -7,7 +7,7 @@ public class Document {
 	/** 文档内容	 */
 	private String content;
 
-	/** 原始类别	 */
+	/** 原始类别，1为正类，0为负类	 */
 	private double category;
 	
 	/** 预测类别	 */
@@ -18,6 +18,9 @@ public class Document {
 
 	/** 词频统计，已去停用词	 */
 	private Map<String, Integer> termFrequency;
+	
+	/** 有效词的总数目	 */
+	private int termNum;
 
 	/** 文档的向量表达形式	 */
 	private double[] vector;
@@ -72,6 +75,14 @@ public class Document {
 	
 	public Document(String content) {
 		this.content = content;
+	}
+
+	public int getTermNum() {
+		return termNum;
+	}
+
+	public void setTermNum(int termNum) {
+		this.termNum = termNum;
 	}
 
 }

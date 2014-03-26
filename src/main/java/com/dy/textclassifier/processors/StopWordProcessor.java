@@ -58,18 +58,21 @@ public class StopWordProcessor implements IProcessor {
 	 */
 	public void process(List<Document> documents) {
 		for (Document document : documents) {
-			HashMap<String, Integer> features = new HashMap<String, Integer>();
-			for (String word : document.getWords()) {
-				if (!isStopWord(word)) {
-					if (features.containsKey(word)) {
-						features.put(word, features.get(word) + 1);
+			HashMap<String, Integer> termFrequency = new HashMap<String, Integer>();
+			int sum = 0;
+			for (String term : document.getTerms()) {
+				if (!isStopWord(term)) {
+					if (termFrequency.containsKey(term)) {
+						termFrequency.put(term, termFrequency.get(term) + 1);
 					} else {
-						features.put(word, 1);
+						termFrequency.put(term, 1);
 					}
+					sum++;
 				}
 			}
-			document.setWords(null);
-			document.setFeatures(features);
+			document.setTerms(null);
+			document.setTermFrequency(termFrequency);
+			document.setTermNum(sum);
 			// for debug
 		}
 	}

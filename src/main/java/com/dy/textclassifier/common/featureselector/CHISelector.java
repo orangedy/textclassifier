@@ -15,7 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.dy.textclassifier.common.bean.StatisticBean;
-import com.dy.textclassifier.common.bean.Tuple;
+import com.dy.textclassifier.common.bean.TermCateTuple;
 
 public class CHISelector implements ITermSelector {
 
@@ -73,7 +73,7 @@ public class CHISelector implements ITermSelector {
 		double N = statistic.getDocNum();
 		double posi = statistic.getPosiNum();
 		double nega = statistic.getNegaNum();
-		for (Map.Entry<String, Tuple> entry : statistic.getTermInfo().entrySet()) {
+		for (Map.Entry<String, TermCateTuple> entry : statistic.getTermCateInfo().entrySet()) {
 			a = entry.getValue().getPosi();
 			b = entry.getValue().getNega();
 			c = posi - a;

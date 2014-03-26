@@ -2,6 +2,7 @@ package com.dy.textclassifier.classifier;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -18,7 +19,7 @@ import com.dy.textclassifier.common.bean.Document;
 public class SVMClassifier extends AbstractClassifier{
 	private static Logger log = LogManager.getLogger(SVMClassifier.class);
 	
-	private String outputPath = "";
+	private String outputPath = "results/svm_model.txt";
 	
 	private svm_model model;
 	
@@ -34,15 +35,18 @@ public class SVMClassifier extends AbstractClassifier{
 	}
 	
 	public void eval(List<Document> documents) {
+		initModel(outputPath);
 		for(Document document : documents){
 			double[] value = document.getVector();
-			svm_node[] node = new svm_node[value.length];
+			svm_node[] nodes = new svm_node[value.length];
 			for(int i = 0; i < value.length; i++){
-				node[i].index = i;
-				node[i].value = value[i];
+				svm_node node = new svm_node();
+				node.index = i + 1;
+				node.value = value[i];
+				nodes[i] = node;
 			}
-			double result = svm.svm_predict(this.model, node);
-			document.setCategory((int)result);
+			double result = svm.svm_predict(this.model, nodes);
+			document.setEvalCategory(result);
 		}
 	}
 
@@ -79,21 +83,27 @@ public class SVMClassifier extends AbstractClassifier{
 	}
 	
 	protected svm_problem getSvmProblem(List<Document> documents) {
-		int l = documents.size();
-		double[] y = new double[l];
-
-		svm_node[][] x = new svm_node[l][];
-		for (int i = 0; i < l; i++) {
-			y[i] = documents.get(i).getCategory();
-			for(int j = 0; j < l; j++){
-				svm_node node = new svm_node();
-				node.index = j;
-				node.value = documents.get(i).getVector()[j];
-				x[i][j] = node;
+		int docNum = documents.size();
+		double[] y = new double[docNum];
+		svm_node[][] x = new svm_node[docNum][];
+		for (int i = 0; i < docNum; i++) {
+			Document document = documents.get(i);
+			int featureNum = document.getVector().length;
+			y[i] = document.getCategory();
+			List<svm_node> nodes = new ArrayList<svm_node>();
+			for(int j = 0; j < featureNum; j++){
+				if(document.getVector()[j] != 0){
+					svm_node node = new svm_node();
+					node.index = j + 1;
+					node.value = document.getVector()[j];
+					nodes.add(node);
+				}
 			}
+			x[i] = nodes.toArray(new svm_node[0]);
+			
 		}
 		svm_problem problem = new svm_problem();
-		problem.l = l;
+		problem.l = docNum;
 		problem.y = y;
 		problem.x = x;
 		return problem;
