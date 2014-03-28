@@ -49,7 +49,7 @@ public class DataFromFiles implements DataSource {
 		if (directory.isDirectory()) {
 			for (File file : directory.listFiles()) {
 				Document document = getDocument(file);
-				document.setCategory(0);
+				document.setCategory(-1);
 				documents.add(document);
 			}
 		}

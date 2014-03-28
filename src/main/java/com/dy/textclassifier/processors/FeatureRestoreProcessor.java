@@ -33,9 +33,10 @@ public class FeatureRestoreProcessor implements IProcessor {
 			for(String line : lines) {
 				String[] infos = line.split("	");
 				//for test
-				for(String str : infos){
-					System.out.print(str + " ");
-				}
+//				for(String str : infos){
+//					System.out.print(str + " ");
+//				}
+//				System.out.println("\n");
 				int index = Integer.valueOf(infos[0]);
 				featureWords.add(index, infos[1]);
 				TermTuple tuple = new TermTuple();

@@ -7,7 +7,7 @@ public class Document {
 	/** 文档内容	 */
 	private String content;
 
-	/** 原始类别，1为正类，0为负类	 */
+	/** 原始类别，1为正类，-1为负类	 */
 	private double category;
 	
 	/** 预测类别	 */
