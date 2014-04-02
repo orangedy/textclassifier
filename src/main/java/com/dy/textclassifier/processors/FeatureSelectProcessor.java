@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.dy.textclassifier.common.bean.Document;
 import com.dy.textclassifier.common.bean.StatisticBean;
 import com.dy.textclassifier.common.bean.TermCateTuple;
@@ -16,6 +19,7 @@ import com.dy.textclassifier.common.featureselector.ITermSelector;
 import com.dy.textclassifier.common.utils.FileUtil;
 
 public class FeatureSelectProcessor implements IProcessor {
+	private static Logger log = LogManager.getLogger(FeatureSelectProcessor.class);
 
 	private ITermSelector termSelector;
 
@@ -30,6 +34,7 @@ public class FeatureSelectProcessor implements IProcessor {
 	}
 
 	public void process(List<Document> documents) {
+		log.info("start to select feature");
 		List<String> featureWords = termSelector.selectTerms(statistic, featureNum);
 		shuffle(featureWords);
 		shuffle(featureWords);
@@ -115,5 +120,21 @@ public class FeatureSelectProcessor implements IProcessor {
 
 	public void setStatistic(StatisticBean statistic) {
 		this.statistic = statistic;
+	}
+
+	public int getFeatureNum() {
+		return featureNum;
+	}
+
+	public void setFeatureNum(int featureNum) {
+		this.featureNum = featureNum;
+	}
+
+	public String getFeatureSavePath() {
+		return featureSavePath;
+	}
+
+	public void setFeatureSavePath(String featureSavePath) {
+		this.featureSavePath = featureSavePath;
 	}
 }

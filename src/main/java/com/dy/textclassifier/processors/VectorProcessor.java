@@ -3,11 +3,15 @@ package com.dy.textclassifier.processors;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.dy.textclassifier.common.bean.Document;
 import com.dy.textclassifier.common.bean.StatisticBean;
 import com.dy.textclassifier.common.bean.TermTuple;
 
 public class VectorProcessor implements IProcessor {
+	private static Logger log = LogManager.getLogger(VectorProcessor.class);
 
 	private StatisticBean statistic;
 
@@ -20,11 +24,11 @@ public class VectorProcessor implements IProcessor {
 	}
 
 	public void init() {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void process(List<Document> documents) {
+		log.info("start to build vector");
 		int featureNum = statistic.getFeatureWords().size();
 		Map<String, TermTuple> featureInfo = statistic.getFeatureInfo();
 		for (Document document : documents) {

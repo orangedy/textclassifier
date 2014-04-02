@@ -23,16 +23,14 @@ public class Trainer {
 	private List<Document> documents;
 
 	private List<IProcessor> processors;
-	
+
 	private AbstractClassifier classifier;
 
 	public void init() {
-		if (dataInput == null) {
+		if (dataInput == null || dataInput.init() == false) {
 			log.error("input data can't be emply");
-		} else {
-			dataInput.init();
 		}
-		for(IProcessor processor : processors){
+		for (IProcessor processor : processors) {
 			processor.init();
 		}
 	}
@@ -47,13 +45,12 @@ public class Trainer {
 		}
 		classifier.train(documents);
 	}
-	
+
 	public static void main(String[] args) {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("ApplicationContext.xml");
 		Trainer trainer = (Trainer) ctx.getBean("trainer");
 		trainer.train();
 	}
-	
 
 	public DataSource getDataInput() {
 		return dataInput;

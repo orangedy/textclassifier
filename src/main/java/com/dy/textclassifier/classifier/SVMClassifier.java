@@ -39,6 +39,7 @@ public class SVMClassifier extends AbstractClassifier {
 	}
 
 	public void eval(List<Document> documents) {
+		log.info("start to eval");
 		initModel(outputPath);
 		svm_problem problem = getSvmProblem(documents);
 		saveProblem(problem, "results/test_problem.txt");

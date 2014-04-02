@@ -14,18 +14,23 @@ public class TokenizerProcessor implements IProcessor {
 
 	private ITokenizer tokenizer;
 
+	public void init() {
+
+	}
+
 	public void process(List<Document> documents) {
+		log.info("start to tokenize");
 		for (Document document : documents) {
 			String[] terms = tokenizer.tokenize(document.getContent());
 			document.setContent(null);
 			document.setTerms(terms);
 			// for debug
-//			log.debug(document.getContent());
+			// log.debug(document.getContent());
 			StringBuilder message = new StringBuilder();
-			for(String term : terms){
+			for (String term : terms) {
 				message.append(term + " ");
 			}
-			log.debug(message.toString());
+			log.info(message.toString());
 		}
 	}
 
@@ -35,10 +40,6 @@ public class TokenizerProcessor implements IProcessor {
 
 	public void setTokenizer(ITokenizer tokenizer) {
 		this.tokenizer = tokenizer;
-	}
-
-	public void init() {
-		
 	}
 
 }

@@ -5,10 +5,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.dy.textclassifier.common.bean.Document;
 import com.dy.textclassifier.common.utils.FileUtil;
 
 public class DataFromFiles implements DataSource {
+	
+	private static Logger log = LogManager.getLogger(DataFromFiles.class);
 
 	private String encoding = "GBK";
 
@@ -19,6 +24,9 @@ public class DataFromFiles implements DataSource {
 	private String testPath;
 
 	public boolean init() {
+		if(trainPath == null && evalPath == null && testPath == null){
+			return false;
+		}
 		return true;
 	}
 
@@ -53,6 +61,8 @@ public class DataFromFiles implements DataSource {
 				documents.add(document);
 			}
 		}
+		log.info("positivePath:" + positivePath);
+		log.info("negativePath:" + negativePath);
 		return documents;
 	}
 
@@ -65,6 +75,7 @@ public class DataFromFiles implements DataSource {
 				documents.add(document);
 			}
 		}
+		log.info("evalPath:" + evalPath);
 		return documents;
 	}
 
@@ -84,10 +95,12 @@ public class DataFromFiles implements DataSource {
 		if (directory.isDirectory()) {
 			for (File file : directory.listFiles()) {
 				Document document = getDocument(file);
-				document.setCategory(0);
+				document.setCategory(-1);
 				documents.add(document);
 			}
 		}
+		log.info("positivePath:" + positivePath);
+		log.info("negativePath:" + negativePath);
 		return documents;
 	}
 
@@ -123,16 +136,4 @@ public class DataFromFiles implements DataSource {
 		this.testPath = testPath;
 	}
 
-	// public static void main(String[] args) {
-	// DataFromFiles test = new DataFromFiles();
-	// String path = "E:\\worktemp\\train";
-	// test.setPositivePath(path + "\\neagtive");
-	// test.setNegativePath(path + "\\positive");
-	// if (test.init()) {
-	// List<Document> documents = test.getDocuments();
-	// for (Document document : documents) {
-	// System.out.println(document.getCategory() + " " + document.getContent());
-	// }
-	// }
-	// }
 }

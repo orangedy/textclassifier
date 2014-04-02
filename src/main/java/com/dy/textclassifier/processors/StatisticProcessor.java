@@ -6,11 +6,16 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.dy.textclassifier.common.bean.Document;
 import com.dy.textclassifier.common.bean.StatisticBean;
 import com.dy.textclassifier.common.bean.TermCateTuple;
 
 public class StatisticProcessor implements IProcessor {
+
+	private static Logger log = LogManager.getLogger(StatisticProcessor.class);
 
 	/**
 	 * 统计信息
@@ -23,6 +28,7 @@ public class StatisticProcessor implements IProcessor {
 	}
 
 	public void process(List<Document> documents) {
+		log.info("start to statistic term and category info");
 		statistic.setDocNum(documents.size());
 		for (Document document : documents) {
 			if (document.getCategory() == 1) {
