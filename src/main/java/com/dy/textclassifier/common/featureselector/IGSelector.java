@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,43 +13,36 @@ import org.apache.logging.log4j.Logger;
 import com.dy.textclassifier.common.bean.StatisticBean;
 import com.dy.textclassifier.common.bean.TermCateTuple;
 
-public class CHISelector implements ITermSelector {
+public class IGSelector implements ITermSelector {
 
-	private Logger log = LogManager.getLogger(CHISelector.class);
-
-	/**
-	 * 最小的开方检验的值，当开方检验的值为0.455时，相关性的置信度是50%
-	 */
-	private double minCHIValue = 0.0;
-
-	public double getMinCHIValue() {
-		return minCHIValue;
-	}
-
-	public void setMinCHIValue(double minCHIValue) {
-		this.minCHIValue = minCHIValue;
-	}
+	private static Logger log = LogManager.getLogger(IGSelector.class);
 	
-	private Map<String, Double> CHIValues = new HashMap<String, Double>();
-
+	private Map<String, Double> IGValues = new HashMap<String, Double>();
+	
 	public List<String> selectTerms(StatisticBean statistic, int featureNum) {
-		double a, b, c, d, CHIValue;
+		double a, b, c, d, IGValue;
 		double N = statistic.getDocNum();
 		double posi = statistic.getPosiNum();
 		double nega = statistic.getNegaNum();
+		double log2 = Math.log(2);
+		double hc = posi/N*Math.log(N/posi)/log2 + nega/N*Math.log(N/nega)/log2;
 		for (Map.Entry<String, TermCateTuple> entry : statistic.getTermCateInfo().entrySet()) {
 			a = entry.getValue().getPosi();
 			b = entry.getValue().getNega();
 			c = posi - a;
 			d = nega - b;
-			double numerator = (double) N * (a * d - b * c) * (a * d - b * c);
-			double denominator = (double) (a + c) * (a + b) * (b + d) * (c + d);
-			CHIValue = numerator / denominator;
-			CHIValues.put(entry.getKey(), CHIValue);
+			double hct = calHCT(a, b, N) + calHCT(c, d, N);
+			IGValue = hc - hct;
+			IGValues.put(entry.getKey(), IGValue);
 		}
-		return selectTopN(CHIValues, featureNum);
+		return selectTopN(IGValues, featureNum);
 	}
-
+	
+	private double calHCT(double a, double b, double N){
+		double hct = (a + b)/N * (a/(a + b)*Math.log((a + b)/a)/Math.log(2) + b/(a + b)*Math.log((a + b)/b)/Math.log(2));
+		return hct;
+	}
+	
 	public List<String> selectTopN(Map<String, Double> termMap, int N) {
 		List<String> results = new ArrayList<String>();
 		ArrayList<Map.Entry<String, Double>> tempList = new ArrayList<Map.Entry<String, Double>>(termMap.entrySet());
@@ -69,21 +58,8 @@ public class CHISelector implements ITermSelector {
 			}
 		});
 		for (int i = 0; i < N && i < tempList.size(); i++) {
-			if (tempList.get(i).getValue() > this.minCHIValue) {
-				results.add(tempList.get(i).getKey());
-			} else {
-				break;
-			}
+			results.add(tempList.get(i).getKey());
 		}
 		return results;
 	}
-
-	public double calculateCHI(int a, int b, int c, int d) {
-		double CHIValue = 0;
-		double numerator = (double) (a + b + c + d) * (a * d - b * c) * (a * d - b * c);
-		double denominator = (double) (a + c) * (a + b) * (b + d) * (c + d);
-		CHIValue = numerator / denominator;
-		return CHIValue;
-	}
-
 }
