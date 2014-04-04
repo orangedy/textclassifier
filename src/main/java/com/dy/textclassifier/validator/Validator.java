@@ -2,6 +2,7 @@ package com.dy.textclassifier.validator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -58,18 +59,23 @@ public class Validator {
 		int positiveWrong = 0;
 		int negativeRight = 0;
 		int negativeWrong = 0;
-		for (Document document : documents) {
+		int size = documents.size();
+		List<Integer> error = new ArrayList<Integer>();
+		for (int i = 0; i < size; i++) {
+			Document document = documents.get(i);
 			if (document.getCategory() == 1) {
 				positiveNum++;
 				if (document.getEvalCategory() == 1) {
 					positiveRight++;
 				} else {
 					positiveWrong++;
+					error.add(i);
 				}
 			} else {
 				negativeNum++;
 				if (document.getEvalCategory() == 1) {
 					negativeWrong++;
+					error.add(i);
 				} else {
 					negativeRight++;
 				}
@@ -80,7 +86,10 @@ public class Validator {
 		String content = "positiveNum:" + positiveNum + "\n";
 		content += "negativeNum:" + negativeNum + "\n";
 		content += positiveRight + "	" + positiveWrong + "\n";
-		content += negativeWrong + "	" + negativeRight;
+		content += negativeWrong + "	" + negativeRight + "\n";
+		for(Integer i : error){
+			content += i + "\n";
+		}
 		log.info(content);
 		try {
 			FileUtil.writeStringToFile(file, content, false, "UTF-8");

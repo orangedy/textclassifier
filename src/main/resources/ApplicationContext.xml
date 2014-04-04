@@ -25,9 +25,9 @@
 	</bean>
 	<bean id="svmClassifier" class="com.dy.textclassifier.classifier.SVMClassifier"></bean>
 	<bean id="datasource" class="com.dy.textclassifier.common.datasource.DataFromFiles">
-		<property name="trainPath" value="E:\\worktemp\\EconomyVSEnviorment\\train"></property>
-		<property name="evalPath" value="E:\\worktemp\\EconomyVSEnviorment\\eval"></property>
-		<property name="testPath" value="E:\\worktemp\\EconomyVSEnviorment\\eval"></property>
+		<property name="trainPath" value="E:\\worktemp\\AgricultureVSPolitics\\train"></property>
+		<property name="evalPath" value="E:\\worktemp\\AgricultureVSPolitics\\eval"></property>
+		<property name="testPath" value="E:\\worktemp\\AgricultureVSPolitics\\eval"></property>
 		<property name="encoding" value="GBK"></property>
 	</bean>
 	<bean id="tokenizerProcessor" class="com.dy.textclassifier.processors.TokenizerProcessor">
