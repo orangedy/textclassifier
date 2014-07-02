@@ -75,7 +75,8 @@ public class FeatureSelectProcessor implements IProcessor {
 			int size = statistic.getFeatureWords().size();
 			for (int i = 0; i < size; i++) {
 				String term = statistic.getFeatureWords().get(i);
-				String content = i + "	" + term + "	" + statistic.getFeatureInfo().get(term).getIDFWeight() + "\n";
+				String content = i + "	" + term + "	" + statistic.getFeatureInfo().get(term).getIDFWeight() + "	";
+				content = content + "	" + statistic.getTermCateInfo().get(term).getPosi() + "	" + statistic.getTermCateInfo().get(term).getNega() + "\n";
 				fw.write(content);
 			}
 		} catch (IOException e) {

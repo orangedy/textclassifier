@@ -1,11 +1,24 @@
 package com.dy.textclassifier.common.bean;
 
-public class NaiveBayesModel {
+import java.io.Serializable;
+
+public class NaiveBayesModel implements Serializable{
 	
+	private static final long serialVersionUID = -9028042931038592991L;
+
+	/**
+	 * 各个类别的概率
+	 */
 	private double[] pCate;
 	
+	/**
+	 * 各个特征词在正类中的概率
+	 */
 	private double[] pInPosi;
 	
+	/**
+	 * 各个特征词在负类中的概率
+	 */
 	private double[] pInNega;
 
 	public double[] getpCate() {

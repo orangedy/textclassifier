@@ -25,9 +25,9 @@
 	</bean>
 	<bean id="svmClassifier" class="com.dy.textclassifier.classifier.SVMClassifier"></bean>
 	<bean id="datasource" class="com.dy.textclassifier.common.datasource.DataFromFiles">
-		<property name="trainPath" value="E:\\worktemp\\AgricultureVSPolitics\\train"></property>
-		<property name="evalPath" value="E:\\worktemp\\AgricultureVSPolitics\\eval"></property>
-		<property name="testPath" value="E:\\worktemp\\AgricultureVSPolitics\\eval"></property>
+		<property name="trainPath" value="E:\\worktemp\\EconomyVSEnviorment\\train"></property>
+		<property name="evalPath" value="E:\\worktemp\\EconomyVSEnviorment\\eval"></property>
+		<property name="testPath" value="E:\\worktemp\\EconomyVSEnviorment\\eval"></property>
 		<property name="encoding" value="GBK"></property>
 	</bean>
 	<bean id="tokenizerProcessor" class="com.dy.textclassifier.processors.TokenizerProcessor">
@@ -42,7 +42,7 @@
 			<ref bean="statistic"></ref>
 		</property>
 		<property name="termSelector">
-			<ref bean="featureSelector"></ref>
+			<ref bean="CHISelector"></ref>
 		</property>
 	</bean>
 	<bean id="vectorProcessor" class="com.dy.textclassifier.processors.VectorProcessor">
@@ -58,8 +58,9 @@
 
 	<bean id="tokenizer" class="com.dy.textclassifier.common.tokenizer.ICTCLASTokenizer"></bean>
 	<bean id="statistic" class="com.dy.textclassifier.common.bean.StatisticBean"></bean>
-	<bean id="featureSelector"
+	<bean id="CHISelector"
 		class="com.dy.textclassifier.common.featureselector.CHISelector"></bean>
+	<bean id="IGSelector" class="com.dy.textclassifier.common.featureselector.IGSelector"></bean>
 	
 	
 	<bean id="validator" class="com.dy.textclassifier.validator.Validator">
@@ -84,4 +85,11 @@
 			<ref bean="statistic"></ref>
 		</property>
 	</bean>
+	
+	<bean id="naiveBayesClassifier" class="com.dy.textclassifier.classifier.NaiveBayesClassifier">
+		<property name="statistic">
+			<ref bean="statistic"></ref>
+		</property>
+	</bean>
+	
 </beans>

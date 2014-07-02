@@ -48,13 +48,7 @@ public class IGSelector implements ITermSelector {
 		ArrayList<Map.Entry<String, Double>> tempList = new ArrayList<Map.Entry<String, Double>>(termMap.entrySet());
 		Collections.sort(tempList, new Comparator<Map.Entry<String, Double>>() {
 			public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
-				if (o1.getValue() < o2.getValue()) {
-					return 1;
-				} else if (o1.getValue().equals(o2.getValue())) {
-					return 0;
-				} else {
-					return -1;
-				}
+				return o1.getValue().compareTo(o2.getValue());
 			}
 		});
 		for (int i = 0; i < N && i < tempList.size(); i++) {

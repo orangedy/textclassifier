@@ -3,7 +3,6 @@ package com.dy.textclassifier.common.bean;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class StatisticBean {
 	/** 总训练文档数	 */

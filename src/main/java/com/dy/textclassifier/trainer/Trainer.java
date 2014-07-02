@@ -45,6 +45,12 @@ public class Trainer {
 		}
 		classifier.train(documents);
 	}
+	
+	public void getVector(){
+		for (IProcessor processor : processors) {
+			processor.process(documents);
+		}
+	}
 
 	public static void main(String[] args) {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("ApplicationContext.xml");

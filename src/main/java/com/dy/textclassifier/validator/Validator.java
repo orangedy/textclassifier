@@ -23,7 +23,7 @@ public class Validator {
 
 	private DataSource dataInput;
 
-	private String outputFile = "results/result.txt";
+	private String outputFile = "results/result_bayes.txt";
 
 	private List<Document> documents;
 
